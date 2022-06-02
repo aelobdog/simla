@@ -108,7 +108,7 @@ func (l *Lexer) readWord() Token {
 	} else if word == "true" || word == "false" {
 		return NewToken(Boolean, word, l.line)
 	}
-	return NewToken(Identifier, word, l.line)
+	return NewToken(Ident, word, l.line)
 }
 
 func (l *Lexer) readString() Token {

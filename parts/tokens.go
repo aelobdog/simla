@@ -66,7 +66,7 @@ const (
     EOF
     EOL
     Illegal
-    Identifier
+    Ident
 )
 
 func (t *TokenType) StringFor() string {
@@ -114,7 +114,7 @@ func (t *TokenType) StringFor() string {
         case False: return "false"
         case EOF: return "EOF"
         case EOL: return "EOL"
-        case Identifier: return "Identifier"
+        case Ident: return "Ident"
     }
     return "Illegal"
 }

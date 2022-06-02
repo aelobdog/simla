@@ -20,20 +20,75 @@ package parts
 // import "fmt"
 
 type Node interface {
-	TokenLiteral() string
-	String() string
-}
-
-type Statement interface {
-	Node
-	statementNode()
-}
-
-type Expression interface {
-	Node
-	expressionNode()
+	NodeName() string
 }
 
 type Program struct {
-	Statements []Statement
+	Statements []Node
+}
+
+type Identifier struct {
+    Token Token
+    Value string
+}
+
+type IntLit struct {
+    Token Token
+    Value int32
+}
+
+type RealLit struct {
+    Token Token
+    Value float32
+}
+
+type CharLit struct {
+    Token Token
+    Value byte
+}
+
+type BoolLit struct {
+    Token Token
+    Value bool
+}
+
+type StringLit struct {
+    Token Token
+}
+
+// TODO: make ast nodes for the different statements and expressions
+// statements:
+//      declaration
+//      initialization/function defn/struct defn/ all that
+//      conditional
+//      loops
+
+// making all the structs belong to interface:Node
+
+func (o *Program) NodeName() string {
+    return "Program"
+}
+
+func (o *Identifier) NodeName() string {
+    return "Id: " + o.Token.Lexeme
+}
+
+func (o *IntLit) NodeName() string {
+    return "Int: " + o.Token.Lexeme
+}
+
+func (o *RealLit) NodeName() string {
+    return "Real: " + o.Token.Lexeme
+}
+
+func (o *CharLit) NodeName() string {
+    return "Char: " + o.Token.Lexeme
+}
+
+func (o *BoolLit) NodeName() string {
+    return "Bool: " + o.Token.Lexeme
+}
+
+func (o *StringLit) NodeName() string {
+    return "Str: " + o.Token.Lexeme
 }

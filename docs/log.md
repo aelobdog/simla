@@ -14,3 +14,8 @@
 - notes:
     - added `print`, `true`, `false` to the token list
     - added code to lexer to support these new tokens
+
+### Day 3
+- modified: parts/ast.go
+- notes:
+    - wrote some node definitions (literals, identifiers, program)
