@@ -19,3 +19,8 @@
 - modified: parts/ast.go
 - notes:
     - wrote some node definitions (literals, identifiers, program)
+
+### Day 4
+- modified: parts/ast.go
+- notes:
+    - defined the decl, stmt and expr structs and wrote "constructors" for them

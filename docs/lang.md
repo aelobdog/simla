@@ -1,23 +1,25 @@
 # Language Features
 
-## Values
+## Features
+
+### Values
 ```
 12, 12.3, 'c', "hello", true
 ```
 
-## Variables
+### Variables
 ```
 name : int
 name : char = 'c'
 ```
 
-## Arrays
+### Arrays
 ```
 name : array [number] type
 name : array [number] type = {values}
 ```
 
-## Conditionals
+### Conditionals
 ```
 if CONDITION then
     code
@@ -26,28 +28,35 @@ else
 end
 ```
 
-## Loops
+### Loops
 ```
 loop CONDITION
 
 end
 ```
 
-## Functions
+### Functions
 ```
 name : func RET_TYPE ( PARAMS ) = {
 
 }
 ```
 
-## Structs
+### Structs
 ```
 name : struct = {
     sub-components
 }
 ```
 
-## Comments
+### Comments
 ```
 ; comment text
 ```
+
+## Design Notes
+
+References used to design simla
+    - _Introduction to Compilers and Language Design_, Douglas Thain, https://www3.nd.edu/~dthain/compilerbook/
+    - _Writing An Interpreter In Go_, Thorsten Ball, https://interpreterbook.com/
+    - _Writing A Compiler in Go_, Thorsten Ball, https://compilerbook.com/

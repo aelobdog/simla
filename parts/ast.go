@@ -23,72 +23,182 @@ type Node interface {
 	NodeName() string
 }
 
-type Program struct {
-	Statements []Node
+type Type uint8
+type Kind uint8
+
+const (
+    TYPE_INT Type = iota
+    TYPE_REAL
+    TYPE_CHAR
+    TYPE_STRING
+    TYPE_BOOL
+)
+
+const (
+    SDecl Kind = iota
+    SExpr
+    SCond
+    SLoop
+    SPrint
+    SReturn
+)
+
+const (
+    // Arithmetic Operators
+    EAdd Kind = iota
+    ESub
+    EMul
+    EDiv
+    ERem
+    // Logical Operators
+    EAnd
+    EOr
+    ENot
+    // Relational Operators
+    ELst
+    ELse
+    EGrt
+    EGre
+    EEql
+    ENeq
+    // Constant Literals
+    EInt
+    EReal
+    EBool
+    EStr
+    EChar
+    // Variable Name
+    EVar
+    // Function Call
+    EFnCall
+)
+
+type Decl struct {
+    Name  string
+    Type  *Type
+    Value *Node
+    Code  *Node
+    Next  *Node
 }
 
-type Identifier struct {
-    Token Token
-    Value string
+type Stmt struct {
+    Kind     Kind
+    Decl     *Decl
+    InitExpr *Node
+    Expr     *Node
+    NextExpr *Node
+    Body     *Stmt
+    ElseBody *Stmt
+    Next     *Stmt
 }
 
-type IntLit struct {
-    Token Token
-    Value int32
-}
+type Expr struct {
+    Kind    Kind
+    
+    Left    *Expr
+    Right   *Expr
 
-type RealLit struct {
-    Token Token
-    Value float32
+    Var     string
+    
+    Ival    int32
+    Rval    float32
+    Cval    byte
+    Bval    bool
+    Sval    string
 }
-
-type CharLit struct {
-    Token Token
-    Value byte
-}
-
-type BoolLit struct {
-    Token Token
-    Value bool
-}
-
-type StringLit struct {
-    Token Token
-}
-
-// TODO: make ast nodes for the different statements and expressions
-// statements:
-//      declaration
-//      initialization/function defn/struct defn/ all that
-//      conditional
-//      loops
 
 // making all the structs belong to interface:Node
 
-func (o *Program) NodeName() string {
-    return "Program"
+func (o* Decl) NodeName() string {
+    return "Decl: " + o.Name
 }
 
-func (o *Identifier) NodeName() string {
-    return "Id: " + o.Token.Lexeme
+func (o* Stmt) NodeName() string {
+    return "Statement"
 }
 
-func (o *IntLit) NodeName() string {
-    return "Int: " + o.Token.Lexeme
+func (o* Expr) NodeName() string {
+    return "Expression"
 }
 
-func (o *RealLit) NodeName() string {
-    return "Real: " + o.Token.Lexeme
+// procedures to make it easy to create ast nodes
+
+func CreateDecl (
+    name string, 
+    dtype *Type,
+    value *Node,
+    code *Node, 
+    next *Node,
+) *Decl {
+    d := &Decl { 
+        Name: name, 
+        Type: dtype,
+        Value: value, 
+        Code: code,
+        Next: next,
+    }
+    return d
 }
 
-func (o *CharLit) NodeName() string {
-    return "Char: " + o.Token.Lexeme
+func CreateStmt (
+    kind Kind,
+    decl *Decl,
+    initExpr *Node,
+    expr *Node,
+    nextExpr *Node,
+    body *Stmt,
+    elseBody *Stmt,
+    next *Stmt,
+) *Stmt {
+    s := &Stmt {
+        Kind: kind,
+        Decl: decl,
+        InitExpr: initExpr,
+        Expr: expr,
+        NextExpr: nextExpr,
+        Body: body,
+        ElseBody: elseBody,
+        Next: next,
+    }
+    return s
 }
 
-func (o *BoolLit) NodeName() string {
-    return "Bool: " + o.Token.Lexeme
+func CreateVarExpr(name string) *Expr {
+    e := &Expr{ Var: name }
+    return e
 }
 
-func (o *StringLit) NodeName() string {
-    return "Str: " + o.Token.Lexeme
+func CreateILitExpr(ival int32) *Expr {
+    e := &Expr{ Ival: ival }
+    return e
+}
+
+func CreateRLitExpr(rval float32) *Expr {
+    e := &Expr{ Rval: rval }
+    return e
+}
+
+func CreateCLitExpr(cval byte) *Expr {
+    e := &Expr{ Cval: cval }
+    return e
+}
+
+func CreateSLitExpr(sval string) *Expr {
+    e := &Expr{ Sval: sval }
+    return e
+}
+
+func CreateBLitExpr(bval bool) *Expr {
+    e := &Expr{ Bval: bval }
+    return e
+}
+
+func CreateBinExpr(kind Kind, left *Expr, right *Expr) *Expr {
+    e := &Expr{ Kind: kind, Left: left, Right: right }
+    return e
+}
+
+func CreateUniExpr(kind Kind, left *Expr) *Expr {
+    e := &Expr{ Kind: kind, Left: left }
+    return e
 }

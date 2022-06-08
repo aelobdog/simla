@@ -18,8 +18,8 @@
 package main
 
 import (
-    "fmt"
-    tools "simla/parts"
+	"fmt"
+	tools "simla/parts"
 )
 
 func main() {
