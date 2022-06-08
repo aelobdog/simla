@@ -23,15 +23,18 @@ type Node interface {
 	NodeName() string
 }
 
-type Type uint8
+type TypeKind uint8
 type Kind uint8
 
 const (
-    TYPE_INT Type = iota
-    TYPE_REAL
-    TYPE_CHAR
-    TYPE_STRING
-    TYPE_BOOL
+    TInt TypeKind = iota
+    TReal
+    TChar
+    TString
+    TBool
+    TVoid
+    TFunc
+    TArray
 )
 
 const (
@@ -44,34 +47,43 @@ const (
 )
 
 const (
-    // Arithmetic Operators
     EAdd Kind = iota
     ESub
     EMul
     EDiv
     ERem
-    // Logical Operators
+
     EAnd
     EOr
     ENot
-    // Relational Operators
     ELst
     ELse
     EGrt
     EGre
     EEql
     ENeq
-    // Constant Literals
+
     EInt
     EReal
     EBool
     EStr
     EChar
-    // Variable Name
+
     EVar
-    // Function Call
     EFnCall
 )
+
+type ParamList struct {
+    Name string
+    Type *Type
+    Next *ParamList
+}
+
+type Type struct {
+    TypeKind TypeKind
+    Subtype  *Type
+    Params   *ParamList
+}
 
 type Decl struct {
     Name  string
@@ -94,12 +106,9 @@ type Stmt struct {
 
 type Expr struct {
     Kind    Kind
-    
     Left    *Expr
     Right   *Expr
-
     Var     string
-    
     Ival    int32
     Rval    float32
     Cval    byte
