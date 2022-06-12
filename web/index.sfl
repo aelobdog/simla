@@ -1,0 +1,11 @@
+###~\/aelobdog &nbsp &nbsp @[Twitter](https://twitter.com/aelobdog)  &nbsp &nbsp @[Github](https://github.com/aelobdog)
+---
+
+## Simla
+Simla is a compiled, typed, toy language that is developed with the intention to learn compiler design. The language is mostly inspired by B-Minor, with changes here and there.
+
+It shares some of its codebase with @[Colon](https://aelobdog.github.io/colon-lang), but that is purely because I was too lazy to re-implement some of the boiler-plate-ary code.
+
+Work's in progress, so a lot of the code changes regularly, breaks regularly (I mean if we're being honest, when is it not broken xD) and since I'm still learning a lot of it could just be wrong\/buggy\/slow.
+
+I'm keeping a log of the development process so if someone wants to follow the steps I'm taking, you can check that out @[here](log.html).

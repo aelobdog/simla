@@ -1,0 +1,68 @@
+### Simla Development Log
+---
+#### Day 1
+<ul>
+<li> modified: docs\/lang.md, parts\/tokens.go, parts\/lexer.go <\/li>
+<li> notes:
+<ul>
+    <li> copied over coltok.go from the colon-lang repo <\/li>
+    <li> copied over collex.go from the colon-lang repo <\/li>
+    <li> removed the 'string = string + string' pattern <\/li>
+    <li> replaced said patter with 'string = string[start:end]' <\/li>
+    <li> edited the tokens and lexer file to fit language description <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
+#### Day 2
+<ul>
+<li> modified: parts\/tokens.go <\/li>
+<li> notes:
+<ul>
+    <li> added 'print', 'true', 'false' to the token list <\/li>
+    <li> added code to lexer to support these new tokens <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
+#### Day 3 <\/li>
+<ul>
+<li> modified: parts\/ast.go <\/li>
+<li> notes:
+<ul>
+    <li> wrote some node definitions (literals, identifiers, program) <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
+#### Day 4 <\/li>
+<ul>
+<li> modified: parts\/ast.go <\/li>
+<li> notes:
+<ul>
+    <li> defined the decl, stmt and expr structs and wrote "constructors" for them <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
+#### Day 5 <\/li>
+<ul>
+<li> modified: parts\/ast.go <\/li>
+<li> notes:
+<ul>
+    <li> defined the type struct <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
+#### Day 6 <\/li>
+<ul>
+<li> modified: parts\/ast.go, parts\/parser.go <\/li>
+<li> notes:
+<ul>
+    <li> modified the ast.go file to differentiate between statements and expressions <\/li>
+	<li> started writing parser.go to parse decls <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---
