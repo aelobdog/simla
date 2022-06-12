@@ -23,6 +23,16 @@ type Node interface {
 	NodeName() string
 }
 
+type ExprNode interface {
+    Node
+    IsExpr()
+}
+
+type StmtNode interface {
+    Node
+    IsStmt()
+}
+
 type TypeKind uint8
 type Kind uint8
 
@@ -90,7 +100,7 @@ type Decl struct {
     Type  *Type
     Value *Node
     Code  *Node
-    Next  *Node
+    Next  *Decl
 }
 
 type Stmt struct {
@@ -116,8 +126,6 @@ type Expr struct {
     Sval    string
 }
 
-// making all the structs belong to interface:Node
-
 func (o* Decl) NodeName() string {
     return "Decl: " + o.Name
 }
@@ -130,6 +138,10 @@ func (o* Expr) NodeName() string {
     return "Expression"
 }
 
+func (o* Decl) IsStmt() {}
+func (o* Stmt) IsStmt() {}
+func (o* Expr) IsExpr() {}
+
 // procedures to make it easy to create ast nodes
 
 func CreateDecl (
@@ -137,7 +149,7 @@ func CreateDecl (
     dtype *Type,
     value *Node,
     code *Node, 
-    next *Node,
+    next *Decl,
 ) *Decl {
     d := &Decl { 
         Name: name, 

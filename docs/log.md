@@ -24,3 +24,14 @@
 - modified: parts/ast.go
 - notes:
     - defined the decl, stmt and expr structs and wrote "constructors" for them
+
+### Day 5
+- modified: parts/ast.go
+- notes:
+    - defined the type struct
+
+### Day 6
+- modified: parts/ast.go, parts/parser.go
+- notes:
+    - modified the ast.go file to differentiate between statements and expressions
+	- started writing parser.go to parse decls

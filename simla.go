@@ -18,18 +18,13 @@
 package main
 
 import (
-	"fmt"
 	tools "simla/parts"
 )
 
 func main() {
-    fmt.Println("hello, world")
-    number := "hello 123.45"
-    l := tools.CreateLexerState(number)
+    number := "variable : int"
+    l := tools.CreateLexer(number)
+    p := tools.CreateParser(l)
 
-    token := l.NewToken()
-    fmt.Println(token.Lexeme)
-
-    token = l.NewToken()
-    fmt.Println(token.Lexeme)
+    p.ParseProgram()
 }

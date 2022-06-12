@@ -31,8 +31,8 @@ type Lexer struct {
 	line    int
 }
 
-// CreateLexerState : to create a new lexer state and initialize it
-func CreateLexerState(source string) *Lexer {
+// CreateLexer : to create a new lexer state and initialize it
+func CreateLexer(source string) *Lexer {
 	lexer := Lexer{
 		Source:  source,
 		CurrPos: 0,
@@ -89,6 +89,7 @@ func (l *Lexer) readNumber() Token {
 	if floating == true {
 		numberType = Real
 	}
+    l.CurrPos = end + 1
 	return NewToken(numberType, l.Source[start:end+1], l.line)
 }
 
@@ -108,6 +109,8 @@ func (l *Lexer) readWord() Token {
 	} else if word == "true" || word == "false" {
 		return NewToken(Boolean, word, l.line)
 	}
+
+    l.CurrPos = end + 1
 	return NewToken(Ident, word, l.line)
 }
 
@@ -130,19 +133,20 @@ func (l *Lexer) readString() Token {
 			os.Exit(1)
 		}
 	}
+    l.CurrPos = end + 1
 	return NewToken(String, l.Source[start:end+1], l.line)
 }
 
 func (l *Lexer) readComment() Token {
 	l.ReadChar()
-	for l.char != '#' {
+	for l.char != '\n' {
 		l.ReadChar()
 	}
 	return NewToken(EOL, "", l.line)
 }
 
 // NextToken : to ge the next token from the source
-func (l *Lexer) NewToken() Token {
+func (l *Lexer) NextToken() Token {
 	var token Token
 	l.consumeWhiteSpace()
 
@@ -215,11 +219,14 @@ func (l *Lexer) NewToken() Token {
 			token = l.readString()
 		} else if l.char == ';' {
 			token = l.readComment()
-		} else {
+		} else if l.NextPos > len(l.Source) {
+            token = NewToken(EOF, "", l.line)
+        } else {
 			token = NewToken(Illegal, string(l.char), l.line)
 		}
 	}
 
+    l.ReadChar()
 	if token.Type == Illegal {
 		fmt.Printf("ERROR (line : %d) Found illegal token (%s)\n.", token.Line, token.Lexeme)
 	}
