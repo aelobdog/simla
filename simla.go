@@ -18,26 +18,22 @@
 package main
 
 import (
+	"fmt"
 	tools "simla/parts"
 )
 
 func main() {
-    number := "variable : int\nrealvar : real"
+	number := "variable : int\nrealvar : real"
 	l := tools.CreateLexer(number)
 	p := tools.CreateParser(l)
-    
-    // for {
-    //     t := l.NextToken()
-    //     if t.Lexeme == "\n" {
-    //         t.Lexeme = "NEWLINE"
-    //     }
-    //     fmt.Printf("%3d \t %10s \t %10s\n", t.Line, t.Lexeme, t.Type.StringFor())
-    //     
-    //     if t.Type == tools.EOF {
-    //         break
-    //     }
-    // }
 
-    print("\n\n\n")
-	p.ParseProgram()
+	d := p.ParseProgram().Decls
+
+    // fmt.Println(d.Name)
+    // fmt.Println(d.Next.Name)
+
+	for d != nil {
+		fmt.Printf("(%s, %d)\n", d.Name, d.Type.TypeKind)
+        d = d.Next
+	}
 }

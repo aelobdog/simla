@@ -96,6 +96,10 @@ type Type struct {
     Params   *ParamList
 }
 
+type Program struct {
+    Decls *Decl
+}
+
 type Decl struct {
     Name  string
     Type  *Type

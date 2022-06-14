@@ -36,32 +36,34 @@ func (p *Parser) advanceToken() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.lexer.NextToken()
 
-    // fmt.Println("current : ", p.currentToken.Lexeme, "\npeeked : ", p.peekToken.Lexeme)
+	// fmt.Println("current : ", p.currentToken.Lexeme, "\npeeked : ", p.peekToken.Lexeme)
 }
 
-func (p *Parser) ParseProgram() *Decl {
+func (p *Parser) ParseProgram() *Program {
 	// a program is basically just a bunch of decls
 
-	var decl *Decl
-    cp := decl
+	program := &Program{}
+    var cp **Decl
 
 	for p.currentToken.Type != EOF {
-        // fmt.Println("LOG: Current decl is for", p.currentToken.Lexeme)
+		// fmt.Println("LOG: Current decl is for", p.currentToken.Lexeme)
+        if program.Decls == nil {
+            program.Decls = p.parseDecl()
+            cp = &program.Decls
+        } else {
+            *cp = p.parseDecl()
+        }
 
-        cp = p.parseDecl()
+        // if cp != nil {
+        //     println(cp.Name)
+        // }
 
 		fmt.Println("LOG: Parsed a decl")
-        fmt.Printf("LOG: (%s, %d)\n", cp.Name, cp.Type.TypeKind)
+		// fmt.Printf("LOG: (%s, %d)\n", cp.Name, cp.Type.TypeKind)
+		cp = &(*cp).Next
 	}
 
-	return decl
-
-	// token := p.currentToken
-	// for token.Type != EOF {
-	//     fmt.Println(token.Line, "|", token.Type.StringFor(), "|", token.Lexeme)
-	//     p.advanceToken()
-	//     token = p.currentToken
-	// }
+	return program
 }
 
 func (p *Parser) parseDecl() *Decl {
@@ -69,11 +71,11 @@ func (p *Parser) parseDecl() *Decl {
 
 	p.expectCurrentTokenOrError(Ident)
 	d.Name = p.currentToken.Lexeme
-    // print(d.Name, ") ")
+	// print(d.Name, ") ")
 	p.advanceToken()
 
 	p.expectCurrentTokenOrError(Colon)
-    // print(d.Name, ") ")
+	// print(d.Name, ") ")
 	p.advanceToken()
 
 	// if !isType(p.currentToken.Type) {
@@ -83,52 +85,52 @@ func (p *Parser) parseDecl() *Decl {
 	// }
 
 	t := p.currentToken.Type
-    dtype := &Type{}
+	dtype := &Type{}
 
-    switch t {
-    case Integer:
-        dtype.TypeKind = TInt
+	switch t {
+	case Integer:
+		dtype.TypeKind = TInt
 
-    case Real:
-        dtype.TypeKind = TReal
+	case Real:
+		dtype.TypeKind = TReal
 
-    case String:
-        dtype.TypeKind = TString
+	case String:
+		dtype.TypeKind = TString
 
-    case Character:
-        dtype.TypeKind = TChar
+	case Character:
+		dtype.TypeKind = TChar
 
-    case Boolean:
-        dtype.TypeKind = TBool
+	case Boolean:
+		dtype.TypeKind = TBool
 
-    case Array:
-        dtype.TypeKind = TArray
-        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
-        panic("Unimplemented")
+	case Array:
+		dtype.TypeKind = TArray
+		fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+		panic("Unimplemented")
 
-    case Function:
-        dtype.TypeKind = TFunc
-        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
-        panic("Unimplemented")
+	case Function:
+		dtype.TypeKind = TFunc
+		fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+		panic("Unimplemented")
 
-    case Struct:
-        dtype.TypeKind = TStruct
-        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
-        panic("Unimplemented")
+	case Struct:
+		dtype.TypeKind = TStruct
+		fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+		panic("Unimplemented")
 
-    default:
-        fmt.Printf("Error: on line %d, expected a type but got `%s`\n",
-        p.currentToken.Line,
-        p.currentToken.Type.StringFor())
+	default:
+		fmt.Printf("Error: on line %d, expected a type but got `%s`\n",
+			p.currentToken.Line,
+			p.currentToken.Type.StringFor())
 
 	}
 
-    // print(d.Name, ") ")
-    p.advanceToken()
+	// print(d.Name, ") ")
+	p.advanceToken()
 	if p.currentToken.Type == EOL || p.currentToken.Type == EOF {
-        d.Type = dtype
-        // print(d.Name, ") ")
-        p.advanceToken()
+		d.Type = dtype
+		// print(d.Name, ") ")
+		p.advanceToken()
 		return d
 	}
 

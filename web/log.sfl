@@ -72,7 +72,9 @@
 <li> notes:
 <ul>
     <li> fixed bugs in the lexer <\/li>
-	<li> continued work on parsing decls <\/li>
+	  <li> continued work on parsing decls <\/li>
+    <br>
+    <li> edit: fixed the "linked list" addition of nodes problem </li>
 <\/ul>
 <\/li>
 <\/ul>

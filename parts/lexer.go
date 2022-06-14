@@ -63,9 +63,9 @@ func (l *Lexer) PeekChar() byte {
 }
 
 func (l *Lexer) updateChar() {
-	if ! (l.NextPos >= len(l.Source)) {
-        l.char = l.Source[l.CurrPos]
-    }
+	if !(l.NextPos >= len(l.Source)) {
+		l.char = l.Source[l.CurrPos]
+	}
 }
 
 // consumeWhiteSpace : consume extra whitespace characters
@@ -95,8 +95,8 @@ func (l *Lexer) readNumber() Token {
 	if floating == true {
 		numberType = Real
 	}
-    l.CurrPos = end
-    l.updateChar()
+	l.CurrPos = end
+	l.updateChar()
 	return NewToken(numberType, l.Source[start:end+1], l.line)
 }
 
@@ -109,8 +109,8 @@ func (l *Lexer) readWord() Token {
 		l.ReadChar()
 	}
 	word := l.Source[start : end+1]
-    l.CurrPos = end
-    l.updateChar()
+	l.CurrPos = end
+	l.updateChar()
 
 	if IsKeyword(word) {
 		return NewToken(Keywords[word], word, l.line)
@@ -139,8 +139,8 @@ func (l *Lexer) readString() Token {
 			os.Exit(1)
 		}
 	}
-    l.CurrPos = end
-    l.updateChar()
+	l.CurrPos = end
+	l.updateChar()
 	return NewToken(String, l.Source[start:end+1], l.line)
 }
 
@@ -227,13 +227,13 @@ func (l *Lexer) NextToken() Token {
 		} else if l.char == ';' {
 			token = l.readComment()
 		} else if l.NextPos > len(l.Source) {
-            token = NewToken(EOF, "", l.line)
-        } else {
+			token = NewToken(EOF, "", l.line)
+		} else {
 			token = NewToken(Illegal, string(l.char), l.line)
 		}
 	}
 
-    l.ReadChar()
+	l.ReadChar()
 	if token.Type == Illegal {
 		fmt.Printf("ERROR (line : %d) Found illegal token (%s)\n.", token.Line, token.Lexeme)
 	}
