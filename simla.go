@@ -22,9 +22,22 @@ import (
 )
 
 func main() {
-    number := "variable : int"
-    l := tools.CreateLexer(number)
-    p := tools.CreateParser(l)
+    number := "variable : int\nrealvar : real"
+	l := tools.CreateLexer(number)
+	p := tools.CreateParser(l)
+    
+    // for {
+    //     t := l.NextToken()
+    //     if t.Lexeme == "\n" {
+    //         t.Lexeme = "NEWLINE"
+    //     }
+    //     fmt.Printf("%3d \t %10s \t %10s\n", t.Line, t.Lexeme, t.Type.StringFor())
+    //     
+    //     if t.Type == tools.EOF {
+    //         break
+    //     }
+    // }
 
-    p.ParseProgram()
+    print("\n\n\n")
+	p.ParseProgram()
 }

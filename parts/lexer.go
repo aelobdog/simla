@@ -62,6 +62,12 @@ func (l *Lexer) PeekChar() byte {
 	return l.Source[l.NextPos]
 }
 
+func (l *Lexer) updateChar() {
+	if ! (l.NextPos >= len(l.Source)) {
+        l.char = l.Source[l.CurrPos]
+    }
+}
+
 // consumeWhiteSpace : consume extra whitespace characters
 func (l *Lexer) consumeWhiteSpace() {
 	for l.char == ' ' || l.char == '\t' || l.char == '\r' {
@@ -89,7 +95,8 @@ func (l *Lexer) readNumber() Token {
 	if floating == true {
 		numberType = Real
 	}
-    l.CurrPos = end + 1
+    l.CurrPos = end
+    l.updateChar()
 	return NewToken(numberType, l.Source[start:end+1], l.line)
 }
 
@@ -101,8 +108,9 @@ func (l *Lexer) readWord() Token {
 		end++
 		l.ReadChar()
 	}
-	l.ReadChar()
 	word := l.Source[start : end+1]
+    l.CurrPos = end
+    l.updateChar()
 
 	if IsKeyword(word) {
 		return NewToken(Keywords[word], word, l.line)
@@ -110,14 +118,12 @@ func (l *Lexer) readWord() Token {
 		return NewToken(Boolean, word, l.line)
 	}
 
-    l.CurrPos = end + 1
 	return NewToken(Ident, word, l.line)
 }
 
 func (l *Lexer) readString() Token {
 	start := l.CurrPos
 	end := l.CurrPos
-	l.ReadChar()
 
 	for l.char != '"' {
 		if l.char == '\\' && l.PeekChar() == '"' {
@@ -133,7 +139,8 @@ func (l *Lexer) readString() Token {
 			os.Exit(1)
 		}
 	}
-    l.CurrPos = end + 1
+    l.CurrPos = end
+    l.updateChar()
 	return NewToken(String, l.Source[start:end+1], l.line)
 }
 

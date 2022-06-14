@@ -45,6 +45,7 @@ const (
     TVoid
     TFunc
     TArray
+    TStruct
 )
 
 const (

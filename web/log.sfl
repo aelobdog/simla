@@ -66,3 +66,14 @@
 <\/li>
 <\/ul>
 ---
+#### Day 7 <\/li>
+<ul>
+<li> modified: parts\/lexer.go, parts\/parser.go <\/li>
+<li> notes:
+<ul>
+    <li> fixed bugs in the lexer <\/li>
+	<li> continued work on parsing decls <\/li>
+<\/ul>
+<\/li>
+<\/ul>
+---

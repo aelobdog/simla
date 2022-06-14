@@ -20,94 +20,135 @@ package parts
 import "fmt"
 
 type Parser struct {
-    lexer        *Lexer
-    currentToken Token
-    peekToken    Token
+	lexer        *Lexer
+	currentToken Token
+	peekToken    Token
 }
 
 func CreateParser(lexer *Lexer) *Parser {
-    p := &Parser{lexer: lexer}
-    p.advanceToken()
-    p.advanceToken()
-    return p
+	p := &Parser{lexer: lexer}
+	p.advanceToken()
+	p.advanceToken()
+	return p
 }
 
 func (p *Parser) advanceToken() {
-    p.currentToken = p.peekToken
-    p.peekToken = p.lexer.NextToken()
-    // fmt.Println(">>", p.currentToken.Lexeme, "\n>>", p.peekToken.Lexeme, "\n")
+	p.currentToken = p.peekToken
+	p.peekToken = p.lexer.NextToken()
+
+    // fmt.Println("current : ", p.currentToken.Lexeme, "\npeeked : ", p.peekToken.Lexeme)
 }
 
 func (p *Parser) ParseProgram() *Decl {
-    // a program is basically just a bunch of decls
+	// a program is basically just a bunch of decls
 
-    var decl *Decl
+	var decl *Decl
     cp := decl
 
-    for p.currentToken.Type != EOF {
-        cp = p.parseDecl();
-        cp = cp.Next
-    }
+	for p.currentToken.Type != EOF {
+        // fmt.Println("LOG: Current decl is for", p.currentToken.Lexeme)
 
-    return decl
+        cp = p.parseDecl()
 
-    // token := p.currentToken
-    // for token.Type != EOF {
-    //     fmt.Println(token.Line, "|", token.Type.StringFor(), "|", token.Lexeme)
-    //     p.advanceToken()
-    //     token = p.currentToken
-    // }
-}
+		fmt.Println("LOG: Parsed a decl")
+        fmt.Printf("LOG: (%s, %d)\n", cp.Name, cp.Type.TypeKind)
+	}
 
-func isType(t TokenType) bool {
-    switch t {
-    case Integer:   fallthrough
-    case Real:      fallthrough
-    case String:    fallthrough
-    case Character: fallthrough
-    case Boolean:   fallthrough
-    case Array:     fallthrough
-    case Function:  fallthrough
-    case Struct:
-        return true
-    }
+	return decl
 
-    return false
+	// token := p.currentToken
+	// for token.Type != EOF {
+	//     fmt.Println(token.Line, "|", token.Type.StringFor(), "|", token.Lexeme)
+	//     p.advanceToken()
+	//     token = p.currentToken
+	// }
 }
 
 func (p *Parser) parseDecl() *Decl {
-    d := &Decl{}
+	d := &Decl{}
 
-    p.expectCurrentTokenOrError(Ident)
-    d.Name = p.currentToken.Lexeme
+	p.expectCurrentTokenOrError(Ident)
+	d.Name = p.currentToken.Lexeme
+    // print(d.Name, ") ")
+	p.advanceToken()
 
-    p.expectPeekTokenOrError(Colon)
+	p.expectCurrentTokenOrError(Colon)
+    // print(d.Name, ") ")
+	p.advanceToken()
+
+	// if !isType(p.currentToken.Type) {
+	//	fmt.Printf("Error: on line %d, expected a type but got `%s`\n",
+	//		p.currentToken.Line,
+	// 		p.currentToken.Type.StringFor())
+	// }
+
+	t := p.currentToken.Type
+    dtype := &Type{}
+
+    switch t {
+    case Integer:
+        dtype.TypeKind = TInt
+
+    case Real:
+        dtype.TypeKind = TReal
+
+    case String:
+        dtype.TypeKind = TString
+
+    case Character:
+        dtype.TypeKind = TChar
+
+    case Boolean:
+        dtype.TypeKind = TBool
+
+    case Array:
+        dtype.TypeKind = TArray
+        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+        panic("Unimplemented")
+
+    case Function:
+        dtype.TypeKind = TFunc
+        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+        panic("Unimplemented")
+
+    case Struct:
+        dtype.TypeKind = TStruct
+        fmt.Println("OUTPUT WRONG FROM THIS POINT ON")
+        panic("Unimplemented")
+
+    default:
+        fmt.Printf("Error: on line %d, expected a type but got `%s`\n",
+        p.currentToken.Line,
+        p.currentToken.Type.StringFor())
+
+	}
+
+    // print(d.Name, ") ")
     p.advanceToken()
-    p.advanceToken()
+	if p.currentToken.Type == EOL || p.currentToken.Type == EOF {
+        d.Type = dtype
+        // print(d.Name, ") ")
+        p.advanceToken()
+		return d
+	}
 
-    if !isType(p.currentToken.Type) {
-        fmt.Printf("Error: on line %d, expected a type but got `%s`",
-                    p.currentToken.Line, 
-                    p.currentToken.Type.StringFor())
-    }
-
-    return d
+	return d
 }
 
 func (p *Parser) expectCurrentTokenOrError(t TokenType) {
-    if p.currentToken.Type != t {
-        fmt.Printf("Error: on line %d, expected token of type `%s` but got `%s`",
-                    p.currentToken.Line, 
-                    t.StringFor(),
-                    p.currentToken.Type.StringFor())
-    }
+	if p.currentToken.Type != t {
+		fmt.Printf("Error: on line %d, expected token of type `%s` but got `%s`\n",
+			p.currentToken.Line,
+			t.StringFor(),
+			p.currentToken.Type.StringFor())
+	}
 }
 
 func (p *Parser) expectPeekTokenOrError(t TokenType) {
-    if p.peekToken.Type != t {
-        fmt.Printf("Error: on line %d, expected token of type `%s` but got `%s`",
-                    p.peekToken.Line, 
-                    t.StringFor(),
-                    p.peekToken.Type.StringFor())
-    }
+	if p.peekToken.Type != t {
+		fmt.Printf("Error: on line %d, expected token of type `%s` but got `%s`\n",
+			p.peekToken.Line,
+			t.StringFor(),
+			p.peekToken.Type.StringFor())
+	}
 }
